@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "navruzm/lmongo": "*"
+        "navruzm/lmongo": "master-dev"
     },
     "authors": [
         {

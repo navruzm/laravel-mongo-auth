@@ -1,6 +1,7 @@
 <?php namespace MongoAuth;
 
 use Illuminate\Auth as Auth;
+use Illuminate\Hashing\HasherInterface;
 
 class MongoUserProvider implements Auth\UserProviderInterface {
     
@@ -10,7 +11,7 @@ class MongoUserProvider implements Auth\UserProviderInterface {
 
     protected $collection;
         
-    public function __construct(MongoDB $conn, HasherInterface $hasher, $collection)
+    public function __construct(\LMongo\Database $conn, HasherInterface $hasher, $collection)
     {
         $this->conn = $conn;
         $this->collection = $collection;
@@ -25,11 +26,12 @@ class MongoUserProvider implements Auth\UserProviderInterface {
      */
     public function retrieveByID($identifier)
     {
-        $user = $this->conn->{$this->table}->findOne(array('_id' => new \MongoID($identifier)));
+        $user = $this->conn->{$this->collection}->findOne(array('_id' => new \MongoID($identifier)));
 
         if ( ! is_null($user))
         {
-            return new GenericUser((array) $user);
+            $user['id'] = (string) $user['_id'];
+            return new Auth\GenericUser((array) $user);
         }
     }
 
@@ -41,13 +43,22 @@ class MongoUserProvider implements Auth\UserProviderInterface {
      */
     public function retrieveByCredentials(array $credentials)
     {
-        unset($credentials['password']);
+        $query = array();
+
+        foreach ($credentials as $key => $value)
+        {
+            if ( ! str_contains($key, 'password'))
+            {
+                $query[$key] = $value;
+            }
+        }
         
-        $user = $this->conn->{$this->table}->findOne(array('_id' => new \MongoID($identifier)));
+        $user = $this->conn->{$this->collection}->findOne($query);
 
         if ( ! is_null($user))
         {
-            return new GenericUser((array) $user);
+            $user['id'] = (string) $user['_id'];
+            return new Auth\GenericUser((array) $user);
         }
     }
 
@@ -58,7 +69,7 @@ class MongoUserProvider implements Auth\UserProviderInterface {
      * @param  array  $credentials
      * @return bool
      */
-    public function validateCredentials(UserInterface $user, array $credentials)
+    public function validateCredentials(Auth\UserInterface $user, array $credentials)
     {
         $plain = $credentials['password'];
 
