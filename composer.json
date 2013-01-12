@@ -1,0 +1,25 @@
+{
+    "name": "navruzm/mongo-auth",
+    "type": "library",
+    "description": "MongoDB Auth Driver for use in Laravel 4",
+    "keywords": ["L4", "MongoDB", "Laravel 4", "Laravel"],
+    "homepage": "http://github.com/navruzm/mongo-auth/",
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/navruzm/lmongo"
+        }
+    ],
+    "require": {
+        "navruzm/lmongo": "*"
+    },
+    "authors": [
+        {
+            "name": "Mustafa Navruz",
+            "email": "mustafanavruz@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "MongoAuth": "src/" }
+    }
+}
