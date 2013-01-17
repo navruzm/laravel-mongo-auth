@@ -1,17 +1,14 @@
-MongoAuth
-==============
-
 [MongoDB](http://www.mongodb.org/) Authentication driver for [Laravel 4](http://laravel.com/).
 
 Installation
 ============
 
-Add `navruzm/mongo-auth` as a requirement to composer.json:
+Add `navruzm/laravel-mongo-auth` as a requirement to composer.json:
 
 ```json
 {
     "require": {
-        "navruzm/mongo-auth": "*"
+        "navruzm/laravel-mongo-auth": "*"
     }
 }
 ```
