@@ -3,7 +3,7 @@
 use MongoDate;
 use LMongo\Database;
 
-class DatabaseReminderRepository implements ReminderRepositoryInterface {
+class MongoReminderRepository implements ReminderRepositoryInterface {
 
 	/**
 	 * The database connection instance.
