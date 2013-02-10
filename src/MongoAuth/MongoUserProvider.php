@@ -1,23 +1,49 @@
 <?php namespace MongoAuth;
 
-use Illuminate\Auth as Auth;
+use Illuminate\Auth\GenericUser;
+use Illuminate\Auth\UserInterface;
+use Illuminate\Auth\UserProviderInterface;
 use Illuminate\Hashing\HasherInterface;
+use LMongo\Database;
 
-class MongoUserProvider implements Auth\UserProviderInterface {
-    
-    protected $conn;
+class MongoUserProvider implements UserProviderInterface {
 
+    /**
+     * The database connection instance.
+     *
+     * @var LMongo\Database
+     */
+    protected $connection;
+
+    /**
+     * The collection containing the users
+     *
+     * @var string
+     */
+    protected $collection;
+
+    /**
+     * The hasher implementation.
+     *
+     * @var Illuminate\Hashing\HasherInterface
+     */
     protected $hasher;
 
-    protected $collection;
-        
-    public function __construct(\LMongo\Database $conn, HasherInterface $hasher, $collection)
+    /**
+     * Create a new database user provider.
+     *
+     * @param  LMongo\Database  $connection
+     * @param  Illuminate\Hashing\HasherInterface  $hasher
+     * @param  string  $collection
+     * @return void
+     */
+    public function __construct(Database $connection, HasherInterface $hasher, $collection)
     {
-        $this->conn = $conn;
+        $this->connection = $connection;
         $this->collection = $collection;
         $this->hasher = $hasher;
     }
-    
+
 	/**
      * Retrieve a user by their unique idenetifier.
      *
@@ -26,12 +52,13 @@ class MongoUserProvider implements Auth\UserProviderInterface {
      */
     public function retrieveByID($identifier)
     {
-        $user = $this->conn->{$this->collection}->findOne(array('_id' => new \MongoID($identifier)));
+        $user = $this->connection->collection($this->collection)->find($identifier);
 
         if ( ! is_null($user))
         {
             $user['id'] = (string) $user['_id'];
-            return new Auth\GenericUser((array) $user);
+
+            return new GenericUser((array) $user);
         }
     }
 
@@ -43,22 +70,23 @@ class MongoUserProvider implements Auth\UserProviderInterface {
      */
     public function retrieveByCredentials(array $credentials)
     {
-        $query = array();
+        $query = $this->connection->collection($this->collection);
 
         foreach ($credentials as $key => $value)
         {
             if ( ! str_contains($key, 'password'))
             {
-                $query[$key] = $value;
+                $query->where($key, $value);
             }
         }
-        
-        $user = $this->conn->{$this->collection}->findOne($query);
+
+        $user = $query->first($query);
 
         if ( ! is_null($user))
         {
             $user['id'] = (string) $user['_id'];
-            return new Auth\GenericUser((array) $user);
+
+            return new GenericUser((array) $user);
         }
     }
 
@@ -69,7 +97,7 @@ class MongoUserProvider implements Auth\UserProviderInterface {
      * @param  array  $credentials
      * @return bool
      */
-    public function validateCredentials(Auth\UserInterface $user, array $credentials)
+    public function validateCredentials(UserInterface $user, array $credentials)
     {
         $plain = $credentials['password'];
 
