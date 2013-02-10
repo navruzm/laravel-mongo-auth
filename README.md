@@ -14,6 +14,6 @@ Add `navruzm/laravel-mongo-auth` as a requirement to composer.json:
 ```
 And then run `composer update`
 
-Once Composer has updated your packages open up `app/config/app.php` and change `Illuminate\Auth\AuthServiceProvider` to `MongoAuth\MongoAuthServiceProvider`
+Once Composer has updated your packages open up `app/config/app.php` and change `Illuminate\Auth\AuthServiceProvider` to `MongoAuth\MongoAuthServiceProvider` and `Illuminate\Auth\Reminders\ReminderServiceProvider` to `MongoAuth\Reminders\ReminderServiceProvider`.
 
 Then open `app/config/auth.php` and find the `driver` key and change to `mongo`.
