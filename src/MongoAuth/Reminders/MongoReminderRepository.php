@@ -1,7 +1,9 @@
-<?php namespace Illuminate\Auth\Reminders;
+<?php namespace MongoAuth\Reminders;
 
 use MongoDate;
 use LMongo\Database;
+use Illuminate\Auth\Reminders\ReminderRepositoryInterface;
+use Illuminate\Auth\Reminders\RemindableInterface;
 
 class MongoReminderRepository implements ReminderRepositoryInterface {
 
@@ -42,7 +44,7 @@ class MongoReminderRepository implements ReminderRepositoryInterface {
 	/**
 	 * Create a new reminder record and token.
 	 *
-	 * @param  Illuminate\Auth\RemindableInterface  $user
+	 * @param  Illuminate\Auth\Reminders\RemindableInterface  $user
 	 * @return string
 	 */
 	public function create(RemindableInterface $user)
@@ -74,7 +76,7 @@ class MongoReminderRepository implements ReminderRepositoryInterface {
 	/**
 	 * Determine if a reminder record exists and is valid.
 	 *
-	 * @param  Illuminate\Auth\RemindableInterface  $user
+	 * @param  Illuminate\Auth\Reminders\RemindableInterface  $user
 	 * @param  string  $token
 	 * @return bool
 	 */
@@ -82,9 +84,9 @@ class MongoReminderRepository implements ReminderRepositoryInterface {
 	{
 		$email = $user->getReminderEmail();
 
-		$reminder = (object) $this->getCollection()->where('email', $email)->where('token', $token)->first();
+		$reminder = $this->getCollection()->where('email', $email)->where('token', $token)->first();
 
-		return $reminder and ! $this->reminderExpired($reminder);
+		return $reminder and ! $this->reminderExpired((object) $reminder);
 	}
 
 	/**
@@ -95,7 +97,7 @@ class MongoReminderRepository implements ReminderRepositoryInterface {
 	 */
 	protected function reminderExpired($reminder)
 	{
-		$createdPlusHour = $reminderExpired->created_at->sec + 216000;
+		$createdPlusHour = $reminder->created_at->sec + 216000;
 
 		return $createdPlusHour < $this->getCurrentTime();
 	}
@@ -124,7 +126,7 @@ class MongoReminderRepository implements ReminderRepositoryInterface {
 	/**
 	 * Create a new token for the user.
 	 *
-	 * @param  Illuminate\Auth\RemindableInterface  $user
+	 * @param  Illuminate\Auth\Reminders\RemindableInterface  $user
 	 * @return string
 	 */
 	public function createNewToken(RemindableInterface $user)
