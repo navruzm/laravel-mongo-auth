@@ -65,7 +65,7 @@ class ReminderServiceProvider extends ServiceProvider {
 
 		$app['auth.reminder.repository'] = $app->share(function($app)
 		{
-			$connection = $app['mongo']->connection();
+			$connection = $app['lmongo']->connection();
 
 			// The database reminder repository is an implementation of the reminder repo
 			// interface, and is responsible for the actual storing of auth tokens and

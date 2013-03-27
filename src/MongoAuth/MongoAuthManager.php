@@ -3,7 +3,7 @@
 use Illuminate\Auth as Auth;
 
 class MongoAuthManager extends Auth\AuthManager {
-    
+
     /**
      * Create an instance of the database driver.
      *
@@ -23,7 +23,7 @@ class MongoAuthManager extends Auth\AuthManager {
      */
     protected function createMongoProvider()
     {
-        $connection = $this->app['mongo']->connection();
+        $connection = $this->app['lmongo']->connection();
 
         $collection = $this->app['config']['auth.table'];
 

@@ -4,14 +4,14 @@ use Illuminate\Auth\GenericUser;
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\UserProviderInterface;
 use Illuminate\Hashing\HasherInterface;
-use LMongo\Database;
+use LMongo\DatabaseManager;
 
 class MongoUserProvider implements UserProviderInterface {
 
     /**
      * The database connection instance.
      *
-     * @var LMongo\Database
+     * @var LMongo\DatabaseManager
      */
     protected $connection;
 
@@ -32,12 +32,12 @@ class MongoUserProvider implements UserProviderInterface {
     /**
      * Create a new database user provider.
      *
-     * @param  LMongo\Database  $connection
+     * @param  LMongo\DatabaseManager  $connection
      * @param  Illuminate\Hashing\HasherInterface  $hasher
      * @param  string  $collection
      * @return void
      */
-    public function __construct(Database $connection, HasherInterface $hasher, $collection)
+    public function __construct(DatabaseManager $connection, HasherInterface $hasher, $collection)
     {
         $this->connection = $connection;
         $this->collection = $collection;

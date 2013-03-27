@@ -12,7 +12,7 @@ class AuthMongoUserProviderTest extends PHPUnit_Framework_TestCase {
 
 	public function testRetrieveByIDReturnsUserWhenUserIsFound()
 	{
-		$conn = m::mock('LMongo\Database');
+		$conn = m::mock('LMongo\DatabaseManager');
 		$conn->shouldReceive('collection')->once()->with('foo')->andReturn($conn);
 		$conn->shouldReceive('find')->once()->with(1)->andReturn(array('_id' => 1, 'name' => 'Dayle'));
 		$hasher = m::mock('Illuminate\Hashing\HasherInterface');
@@ -27,7 +27,7 @@ class AuthMongoUserProviderTest extends PHPUnit_Framework_TestCase {
 
 	public function testRetrieveByIDReturnsNullWhenUserIsNotFound()
 	{
-		$conn = m::mock('LMongo\Database');
+		$conn = m::mock('LMongo\DatabaseManager');
 		$conn->shouldReceive('collection')->once()->with('foo')->andReturn($conn);
 		$conn->shouldReceive('find')->once()->with(1)->andReturn(null);
 		$hasher = m::mock('Illuminate\Hashing\HasherInterface');
@@ -40,7 +40,7 @@ class AuthMongoUserProviderTest extends PHPUnit_Framework_TestCase {
 
 	public function testRetrieveByCredentialsReturnsUserWhenUserIsFound()
 	{
-		$conn = m::mock('LMongo\Database');
+		$conn = m::mock('LMongo\DatabaseManager');
 		$conn->shouldReceive('collection')->once()->with('foo')->andReturn($conn);
 		$conn->shouldReceive('where')->once()->with('username', 'dayle');
 		$conn->shouldReceive('first')->once()->andReturn(array('_id' => 1, 'name' => 'taylor'));
@@ -56,7 +56,7 @@ class AuthMongoUserProviderTest extends PHPUnit_Framework_TestCase {
 
 	public function testRetrieveByCredentialsReturnsNullWhenUserIsFound()
 	{
-		$conn = m::mock('LMongo\Database');
+		$conn = m::mock('LMongo\DatabaseManager');
 		$conn->shouldReceive('collection')->once()->with('foo')->andReturn($conn);
 		$conn->shouldReceive('where')->once()->with('username', 'dayle');
 		$conn->shouldReceive('first')->once()->andReturn(null);
@@ -70,7 +70,7 @@ class AuthMongoUserProviderTest extends PHPUnit_Framework_TestCase {
 
 	public function testCredentialValidation()
 	{
-		$conn = m::mock('LMongo\Database');
+		$conn = m::mock('LMongo\DatabaseManager');
 		$hasher = m::mock('Illuminate\Hashing\HasherInterface');
 		$hasher->shouldReceive('check')->once()->with('plain', 'hash')->andReturn(true);
 		$provider = new MongoAuth\MongoUserProvider($conn, $hasher, 'foo');

@@ -2,8 +2,8 @@
 
 use Illuminate\Auth as Auth;
 
-class MongoAuthServiceProvider extends Auth\AuthServiceProvider{
-    
+class MongoAuthServiceProvider extends Auth\AuthServiceProvider {
+
     public function register()
 	{
 		$this->app['auth'] = $this->app->share(function($app)
