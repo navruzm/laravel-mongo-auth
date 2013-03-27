@@ -81,7 +81,7 @@ class AuthMongoReminderRepositoryTest extends PHPUnit_Framework_TestCase {
 
 	protected function getRepo()
 	{
-		return new MongoAuth\Reminders\MongoReminderRepository(m::mock('LMongo\DatabaseManager'), 'collection', 'key');
+		return new MongoAuth\Reminders\MongoReminderRepository(m::mock('LMongo\Connection'), 'collection', 'key');
 	}
 
 }

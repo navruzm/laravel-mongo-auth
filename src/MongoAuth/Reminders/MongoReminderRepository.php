@@ -1,7 +1,7 @@
 <?php namespace MongoAuth\Reminders;
 
 use MongoDate;
-use LMongo\DatabaseManager;
+use LMongo\Connection;
 use Illuminate\Auth\Reminders\ReminderRepositoryInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
 
@@ -10,7 +10,7 @@ class MongoReminderRepository implements ReminderRepositoryInterface {
 	/**
 	 * The database connection instance.
 	 *
-	 * @var LMongo\DatabaseManager
+	 * @var LMongo\Connection
 	 */
 	protected $connection;
 
@@ -31,10 +31,10 @@ class MongoReminderRepository implements ReminderRepositoryInterface {
 	/**
 	 * Create a new reminder repository instance.
 	 *
-	 * @var LMongo\DatabaseManager  $connection
+	 * @var LMongo\Connection  $connection
 	 * @return void
 	 */
-	public function __construct(DatabaseManager $connection, $collection, $hashKey)
+	public function __construct(Connection $connection, $collection, $hashKey)
 	{
 		$this->collection = $collection;
 		$this->hashKey = $hashKey;
@@ -151,7 +151,7 @@ class MongoReminderRepository implements ReminderRepositoryInterface {
 	/**
 	 * Get the database connection instance.
 	 *
-	 * @return LMongo\DatabaseManager
+	 * @return LMongo\Connection
 	 */
 	public function getConnection()
 	{
