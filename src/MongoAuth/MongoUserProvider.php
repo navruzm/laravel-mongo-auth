@@ -80,7 +80,7 @@ class MongoUserProvider implements UserProviderInterface {
             }
         }
 
-        $user = $query->first($query);
+        $user = $query->first();
 
         if ( ! is_null($user))
         {
