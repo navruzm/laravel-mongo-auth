@@ -13,7 +13,7 @@ class MongoAuthManager extends Auth\AuthManager {
     {
         $provider = $this->createMongoProvider();
 
-        return new Auth\Guard($provider, $this->app['session']);
+        return new Auth\Guard($provider, $this->app['session.store']);
     }
 
     /**
